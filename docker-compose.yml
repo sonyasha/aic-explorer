@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aic-explorer
+    ports:
+      - "3000:80"
+    restart: unless-stopped
