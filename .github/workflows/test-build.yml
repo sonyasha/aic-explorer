@@ -3,56 +3,55 @@ name: Test and build
 on:
   push:
 
-
 jobs:
   lint:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
-    - name: Set up Node and cache
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18.18.0
-        cache: 'npm'
-    - name: Install dependencies
-      run: npm install
-    - name: Run lint check
-      run: npm run lint
-    - name: Type check
-      run: npx tsc --noEmit
-    - name: Check Prettier formatting
-      run: npm run format:check
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Set up Node and cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.0
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Run lint check
+        run: npm run lint
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Check Prettier formatting
+        run: npm run format:check
 
   test:
     runs-on: ubuntu-latest
     needs: lint
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
-    - name: Set up Node and cache
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18.18.0
-        cache: 'npm'
-    - name: Install dependencies
-      run: npm install
-    - name: Run tests with coverage
-      run: npm run test:coverage
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Set up Node and cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.0
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests with coverage
+        run: npm run test:coverage
 
   build:
     runs-on: ubuntu-latest
     needs: test
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
-    - name: Set up Node and cache
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18.18.0
-        cache: 'npm'
-    - name: Install dependencies
-      run: npm install
-    - name: Build app
-      run: npm run build
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Set up Node and cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.0
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build app
+        run: npm run build
