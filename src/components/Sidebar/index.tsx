@@ -1,4 +1,5 @@
 import './Sidebar.css'
+import '../../styles/shared.css'
 
 import { useEffect, useState } from 'react'
 
@@ -8,9 +9,11 @@ import { ArtType } from '../../types/arttype'
 interface SidebarProps {
   selectedType: number | null
   onSelectType: React.Dispatch<React.SetStateAction<number | null>>
+  visible?: boolean
+  onClose?: () => void
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ selectedType, onSelectType }) => {
+const Sidebar: React.FC<SidebarProps> = ({ selectedType, onSelectType, visible, onClose }) => {
   const [artTypes, setArtTypes] = useState<ArtType[]>([])
   const [error, setError] = useState<string | null>(null)
 
@@ -61,15 +64,20 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedType, onSelectType }) => {
   }, [])
 
   return (
-    <aside className="aic-sidebar-conainer">
-      <h2>Artwork Types</h2>
-      {error && <p className="aic-sidebar-error">{error}</p>}
+    <aside className={`aic-sidebar-conainer ${visible ? 'visible' : ''}`}>
+      <div className="aic-header">Artwork Types</div>
+      {error && <p className="aic-fetch-error">{error}</p>}
       <ul>
         {artTypes.map((artType) => (
           <li
             key={artType.id}
             className={selectedType === artType.id ? 'active' : ''}
-            onClick={() => onSelectType(artType.id)}
+            onClick={() => {
+              onSelectType(artType.id)
+              if (window.innerWidth <= 768 && onClose) {
+                onClose()
+              }
+            }}
           >
             {artType.title}
           </li>

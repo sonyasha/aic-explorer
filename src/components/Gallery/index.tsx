@@ -1,4 +1,5 @@
 import './Gallery.css'
+import '../../styles/shared.css'
 
 import { useEffect, useState } from 'react'
 
@@ -10,7 +11,7 @@ interface GalleryProps {
 }
 
 const Gallery: React.FC<GalleryProps> = ({ selectedType }) => {
-  //   const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [artworks, setArtworks] = useState<ArtWork[]>([])
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
@@ -25,14 +26,42 @@ const Gallery: React.FC<GalleryProps> = ({ selectedType }) => {
   useEffect(() => {
     const loadArtworks = async () => {
       setLoading(true)
-      const data = await fetchArtWorks(page, selectedType)
-      if (data && data.data.length > 0) {
-        setArtworks((prev) => [...prev, ...data.data])
-        setHasMore(data.pagination.total_pages > page)
-      } else {
-        setHasMore(false)
+      try {
+        const cacheKey = `artworks-${selectedType}-${page}`
+        const cached = localStorage.getItem(cacheKey)
+        if (cached) {
+          const parsed = JSON.parse(cached)
+          const expired = Date.now() - parsed.timestamp > 1000 * 60 * 60 * 24
+
+          if (!expired) {
+            setArtworks((prev) => [...prev, ...parsed.data])
+            setHasMore(true)
+            setLoading(false)
+            return
+          }
+        }
+
+        const data = await fetchArtWorks(page, selectedType)
+        if (data && data.data.length > 0) {
+          setArtworks((prev) => [...prev, ...data.data])
+          setHasMore(data.pagination.total_pages > page)
+
+          localStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+              data: data.data,
+              timestamp: Date.now(),
+            })
+          )
+        } else {
+          setHasMore(false)
+        }
+        setLoading(false)
+      } catch (error) {
+        console.error('Failed to fetch artworks:', error)
+        setError('Failed to load artworks. Please try again later.')
+        setLoading(false)
       }
-      setLoading(false)
     }
     loadArtworks()
   }, [selectedType, page])
@@ -40,6 +69,7 @@ const Gallery: React.FC<GalleryProps> = ({ selectedType }) => {
   return (
     <div className="aic-gallery-container">
       <div className="aic-gallery">
+        {error && <p className="aic-fetch-error">{error}</p>}
         {artworks.map((artwork) => (
           <div className="aic-gallery-card" key={`art-${artwork.id}`}>
             {artwork.image_id ? (

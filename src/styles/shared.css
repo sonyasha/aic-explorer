@@ -1,0 +1,13 @@
+.aic-fetch-error {
+  color: red;
+  margin: 0.5rem 0;
+  font-weight: bold;
+}
+
+.aic-header {
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
