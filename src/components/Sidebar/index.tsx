@@ -5,8 +5,12 @@ import { useEffect, useState } from 'react'
 import { fetchArtTypes } from '../../api/artwork_types_api'
 import { ArtType } from '../../types/arttype'
 
-const Sidebar = () => {
-  const [selectedType, setSelectedType] = useState<number>()
+interface SidebarProps {
+  selectedType: number | null
+  onSelectType: React.Dispatch<React.SetStateAction<number | null>>
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ selectedType, onSelectType }) => {
   const [artTypes, setArtTypes] = useState<ArtType[]>([])
   const [error, setError] = useState<string | null>(null)
 
@@ -22,7 +26,7 @@ const Sidebar = () => {
           const oneDay = 1000 * 60 * 60 * 24
 
           if (now - timestamp < oneDay) {
-            setSelectedType(data[0].id)
+            onSelectType(data[0].id)
             setArtTypes(data)
             return
           }
@@ -45,7 +49,7 @@ const Sidebar = () => {
 
         localStorage.setItem('artTypes', JSON.stringify({ data: allData, timestamp: Date.now() }))
 
-        setSelectedType(sortedTypes[0].id)
+        onSelectType(sortedTypes[0].id)
         setArtTypes(sortedTypes)
         return
       } catch (err) {
@@ -56,20 +60,16 @@ const Sidebar = () => {
     loadArtTypes()
   }, [])
 
-  useEffect(() => {
-    console.log('selectedType', selectedType)
-  }, [selectedType])
-
   return (
-    <aside className="sidebar">
+    <aside className="aic-sidebar-conainer">
       <h2>Artwork Types</h2>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="aic-sidebar-error">{error}</p>}
       <ul>
         {artTypes.map((artType) => (
           <li
             key={artType.id}
             className={selectedType === artType.id ? 'active' : ''}
-            onClick={() => setSelectedType(artType.id)}
+            onClick={() => onSelectType(artType.id)}
           >
             {artType.title}
           </li>

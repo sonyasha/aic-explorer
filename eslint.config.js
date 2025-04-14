@@ -8,7 +8,7 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort'
 export default [
   // 1. Basic JavaScript rules
   {
-    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {
         ecmaVersion: 'latest',
@@ -42,6 +42,7 @@ export default [
     rules: {
       ...pluginReact.configs.flat.recommended.rules,
       'react/react-in-jsx-scope': 'off', // no need to import React manually
+      'react/prop-types': 'off',
     },
     settings: {
       react: {
