@@ -1,13 +1,23 @@
-.aic-artwork-detail {
-  padding: 1rem;
-  background-color: var(--app-bg);
-}
 .aic-artwork-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: var(--app-bg);
+  background-color: var(--card-bg);
+  padding: 1rem 1rem 0 1rem;
 }
+
+.aic-artwork-subheader {
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: solid 0.5px var(--header-border-color);
+  padding-bottom: 1rem;
+}
+
+.aic-artwork-context {
+  background-color: var(--app-bg);
+  padding: 1rem;
+}
+
 .aic-collapsible {
   margin-top: 1rem;
 }
@@ -40,6 +50,7 @@
   color: var(--link-color);
   cursor: pointer;
   text-align: left;
+  margin-bottom: 0.5rem;
 }
 
 .aic-artwork-image-wrapper {
@@ -47,6 +58,7 @@
   transition: all 0.3s ease;
   align-items: center;
   display: flex;
+  cursor: zoom-in;
 }
 
 .aic-artwork-image-wrapper.zoomed {

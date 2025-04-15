@@ -17,7 +17,7 @@ const Home = () => {
   return (
     <div className="aic-home-container">
       <div className="aic-header">
-        Header and filter divs to be added later
+        Art Institute of Chicago Explorer
         <button className="aic-sidebar-toggle" onClick={() => setSidebarOpen((prev) => !prev)}>
           ☰
         </button>

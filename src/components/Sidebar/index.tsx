@@ -72,6 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedType, onSelectType, visible, 
     <aside className={`aic-sidebar-conainer ${visible ? 'visible' : ''}`}>
       {error && <p className="aic-fetch-error">{error}</p>}
       <ul>
+        <div className="aic-sidebar-header">Select art category</div>
         {artTypes.map((artType) => (
           <li
             key={artType.id}

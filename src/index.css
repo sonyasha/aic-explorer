@@ -2,10 +2,10 @@
   --card-bg: #fff;
   --text: rgba(19, 19, 19, 0.87);
   --app-bg: #f9f9f9;
-  --type-hover-color: #eee;
-  --type-hover-color-active: #ddd;
+  --type-hover-color: #ececec;
+  --type-hover-color-active: #e3e3e3;
   --link-color: #0077cc;
-  --header-border-color: #595959;
+  --header-border-color: #f2f2f2;
 
   font-family:
     Segoe UI,

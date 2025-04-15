@@ -1,5 +1,5 @@
 .aic-sidebar-conainer {
-  padding: 1rem;
+  padding: 0 1rem 0.5rem 1rem;
   width: 220px;
   background-color: var(--app-bg);
   flex-shrink: 0;
@@ -8,9 +8,14 @@
   transition: transform 0.3s ease;
 }
 
-.aic-sidebar-conainer h2 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
+.aic-sidebar-header {
+  font-size: 1rem;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  background-color: var(--app-bg);
+  z-index: 100;
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
 }
 
 .aic-sidebar-conainer ul {
