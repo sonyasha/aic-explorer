@@ -1,0 +1,24 @@
+name: Deploy Docker to Render
+run-name: Deploy to Render triggered by @${{ github.actor }}
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.actor == github.repository_owner
+
+    steps:
+      - name: Restrict deployments to main branch
+        if: ${{ github.ref != 'refs/heads/main' }}
+        run: |
+          echo "❌ Deployment is only allowed from the main branch."
+          exit 1
+
+      - name: Trigger Render Deploy
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DOCKER_DEPLOY_HOOK }}
+        run: |
+          echo "Deploying Docker container to Render..."
+          curl -X POST "$RENDER_DEPLOY_HOOK"
