@@ -29,7 +29,10 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedType, onSelectType, visible, 
           const oneDay = 1000 * 60 * 60 * 24
 
           if (now - timestamp < oneDay) {
-            onSelectType(data[0].id)
+            if (selectedType === null) {
+              onSelectType(data[0].id)
+            }
+
             setArtTypes(data)
             return
           }
@@ -52,7 +55,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedType, onSelectType, visible, 
 
         localStorage.setItem('artTypes', JSON.stringify({ data: allData, timestamp: Date.now() }))
 
-        onSelectType(sortedTypes[0].id)
+        if (selectedType === null) {
+          onSelectType(sortedTypes[0].id)
+        }
         setArtTypes(sortedTypes)
         return
       } catch (err) {
@@ -65,7 +70,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedType, onSelectType, visible, 
 
   return (
     <aside className={`aic-sidebar-conainer ${visible ? 'visible' : ''}`}>
-      <div className="aic-header">Artwork Types</div>
       {error && <p className="aic-fetch-error">{error}</p>}
       <ul>
         {artTypes.map((artType) => (

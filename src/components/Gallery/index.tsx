@@ -2,9 +2,10 @@ import './Gallery.css'
 import '../../styles/shared.css'
 
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { fetchArtWorks } from '../../api/artwork_api'
-import { ArtWork } from '../../types/artwork'
+import { SimpleArtWork } from '../../types/artwork'
 
 interface GalleryProps {
   selectedType: number | null
@@ -12,7 +13,7 @@ interface GalleryProps {
 
 const Gallery: React.FC<GalleryProps> = ({ selectedType }) => {
   const [error, setError] = useState<string | null>(null)
-  const [artworks, setArtworks] = useState<ArtWork[]>([])
+  const [artworks, setArtworks] = useState<SimpleArtWork[]>([])
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -71,7 +72,11 @@ const Gallery: React.FC<GalleryProps> = ({ selectedType }) => {
       <div className="aic-gallery">
         {error && <p className="aic-fetch-error">{error}</p>}
         {artworks.map((artwork) => (
-          <div className="aic-gallery-card" key={`art-${artwork.id}`}>
+          <Link
+            to={`/art/${artwork.id}?type=${selectedType}`}
+            key={`art-${artwork.id}`}
+            className="aic-gallery-card"
+          >
             {artwork.image_id ? (
               <img
                 className="aic-card-image"
@@ -86,18 +91,13 @@ const Gallery: React.FC<GalleryProps> = ({ selectedType }) => {
               <p>{artwork.artist_display}</p>
               <p>{artwork.date_display} </p>
             </div>
-          </div>
+          </Link>
         ))}
         {hasMore && (
           <button
             className="aic-load-more-button"
             onClick={() => setPage((prev) => prev + 1)}
             disabled={loading}
-            style={{
-              marginTop: '1.5rem',
-              padding: '0.5rem 1rem',
-              fontSize: '1rem',
-            }}
           >
             {loading ? 'Loading...' : 'Load More'}
           </button>
