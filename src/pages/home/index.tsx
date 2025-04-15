@@ -2,13 +2,18 @@ import './home.css'
 import '../../styles/shared.css'
 
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import Gallery from '../../components/Gallery'
 import Sidebar from '../../components/Sidebar'
 
 const Home = () => {
-  const [selectedType, setSelectedType] = useState<number | null>(null)
+  const { search } = useLocation()
+  const params = new URLSearchParams(search)
+  const initialType = Number(params.get('type')) || null
+  const [selectedType, setSelectedType] = useState<number | null>(initialType)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
   return (
     <div className="aic-home-container">
       <div className="aic-header">

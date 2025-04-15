@@ -17,12 +17,6 @@
   overflow: hidden;
 }
 
-.aic-header {
-  padding: 1rem;
-  background-color: #f0f0f0;
-  border-bottom: 1px solid #ddd;
-}
-
 .aic-sidebar-toggle {
   display: none; /* hidden on desktop */
   background: none;
