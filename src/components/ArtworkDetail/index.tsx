@@ -7,24 +7,18 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { fetchSingleArtWork } from '../../api/single_artwork_api'
 import { ArtWork } from '../../types/artwork'
 import { stripHtml } from '../utils/utils'
+import CollapsibleSection from './CollapsibleSection'
+import ZoomableImage from './ZoomableImage'
 
 const ArtworkDetail = () => {
   const { id } = useParams<{ id: string }>()
   const [artwork, setArtwork] = useState<ArtWork | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [showPublications, setShowPublications] = useState(false)
-  const [showExhibitions, setShowExhibitions] = useState(false)
-  const [showMaterials, setShowMaterials] = useState(false)
-  const [showTechniques, setShowTechniques] = useState(false)
   const navigate = useNavigate()
   const { search } = useLocation()
   const params = new URLSearchParams(search)
   const selectedType = params.get('type')
-  const [isZoomed, setIsZoomed] = useState(false)
-  const [imgSrc, setImgSrc] = useState<string>(
-    `https://www.artic.edu/iiif/2/1/full/843,/0/default.jpg`
-  )
 
   useEffect(() => {
     const loadArtwork = async () => {
@@ -41,16 +35,12 @@ const ArtworkDetail = () => {
 
           if (!expired) {
             setArtwork(parsed.data)
-            setImgSrc(
-              `https://www.artic.edu/iiif/2/${parsed.data.image_id}/full/843,/0/default.jpg`
-            )
             setLoading(false)
             return
           }
         }
         const response = await fetchSingleArtWork(id)
         setArtwork(response.data)
-        setImgSrc(`https://www.artic.edu/iiif/2/${response.data.image_id}/full/843,/0/default.jpg`)
       } catch (err) {
         console.error('Failed to fetch artwork:', err)
         setError('An error occurred while fetching the artwork.')
@@ -76,27 +66,12 @@ const ArtworkDetail = () => {
       </div>
       <div className="aic-artwork-context">
         {artwork.image_id && (
-          <div
-            className={`aic-artwork-image-wrapper ${isZoomed ? 'zoomed' : ''}`}
-            onClick={() => setIsZoomed(!isZoomed)}
-          >
-            <img
-              className="aic-artwork-image"
-              src={imgSrc}
-              alt={artwork.title}
-              onError={() => {
-                if (!imgSrc.includes('600')) {
-                  setImgSrc(
-                    `https://www.artic.edu/iiif/2/${artwork.image_id}/full/600,/0/default.jpg`
-                  )
-                } else {
-                  setImgSrc(
-                    `https://www.artic.edu/iiif/2/${artwork.image_id}/full/400,/0/default.jpg`
-                  )
-                }
-              }}
-            />
-          </div>
+          <ZoomableImage
+            src={`https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`}
+            alt={artwork.title}
+            fallback600={`https://www.artic.edu/iiif/2/${artwork.image_id}/full/600,/0/default.jpg`}
+            fallback400={`https://www.artic.edu/iiif/2/${artwork.image_id}/full/400,/0/default.jpg`}
+          />
         )}
         <p>
           <strong>Artist:</strong> {artwork.artist_display}
@@ -111,60 +86,20 @@ const ArtworkDetail = () => {
           <strong>Description:</strong>{' '}
           {stripHtml(artwork.description || 'No description available.')}
         </p>
-        {/* Collapsible: Publication History */}
         {artwork.publication_history && (
-          <div className="aic-collapsible">
-            <button onClick={() => setShowPublications((v) => !v)} className="aic-toggle">
-              {showPublications ? '▼' : '▶'} Publication History
-            </button>
-            {showPublications && (
-              <p className="aic-collapsible-content">{artwork.publication_history}</p>
-            )}
-          </div>
+          <CollapsibleSection title="Publication History" content={artwork.publication_history} />
         )}
 
-        {/* Collapsible: Exhibition History */}
         {artwork.exhibition_history && (
-          <div className="aic-collapsible">
-            <button onClick={() => setShowExhibitions((v) => !v)} className="aic-toggle">
-              {showExhibitions ? '▼' : '▶'} Exhibition History
-            </button>
-            {showExhibitions && (
-              <p className="aic-collapsible-content">{artwork.exhibition_history}</p>
-            )}
-          </div>
+          <CollapsibleSection title="Exhibition History" content={artwork.exhibition_history} />
         )}
 
-        {/* Collapsible: Material Titles */}
         {artwork.material_titles?.length > 0 && (
-          <div className="aic-collapsible">
-            <button onClick={() => setShowMaterials((v) => !v)} className="aic-toggle">
-              {showMaterials ? '▼' : '▶'} Materials
-            </button>
-            {showMaterials && (
-              <ul className="aic-collapsible-content">
-                {artwork.material_titles.map((material, idx) => (
-                  <li key={idx}>{material}</li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <CollapsibleSection title="Materials" content={artwork.material_titles} isList />
         )}
 
-        {/* Collapsible: Technique Titles */}
         {artwork.technique_titles?.length > 0 && (
-          <div className="aic-collapsible">
-            <button onClick={() => setShowTechniques((v) => !v)} className="aic-toggle">
-              {showTechniques ? '▼' : '▶'} Techniques
-            </button>
-            {showTechniques && (
-              <ul className="aic-collapsible-content">
-                {artwork.technique_titles.map((technique, idx) => (
-                  <li key={idx}>{technique}</li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <CollapsibleSection title="Techniques" content={artwork.technique_titles} isList />
         )}
       </div>
     </div>
