@@ -3,11 +3,12 @@ import js from '@eslint/js'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 import pluginReact from 'eslint-plugin-react'
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
 
 export default [
   // 1. Basic JavaScript rules
   {
-    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {
         ecmaVersion: 'latest',
@@ -23,9 +24,12 @@ export default [
     },
     plugins: {
       js,
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       ...js.configs.recommended.rules,
+      'simple-import-sort/imports': 'warn',
+      'simple-import-sort/exports': 'warn',
     },
   },
 
@@ -38,6 +42,7 @@ export default [
     rules: {
       ...pluginReact.configs.flat.recommended.rules,
       'react/react-in-jsx-scope': 'off', // no need to import React manually
+      'react/prop-types': 'off',
     },
     settings: {
       react: {

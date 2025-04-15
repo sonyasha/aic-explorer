@@ -1,0 +1,74 @@
+.aic-gallery-container {
+  display: flex;
+  flex: 1;
+  padding-top: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  background-color: var(--app-bg);
+  overflow-y: auto;
+}
+
+.aic-gallery {
+  width: 100%;
+}
+
+.aic-load-more-button {
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.aic-gallery-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 12px;
+  background-color: var(--card-bg);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  margin-bottom: 1.2rem;
+  padding: 0.75rem;
+  text-decoration: none;
+}
+
+.aic-gallery-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.aic-card-image {
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  /* aspect-ratio: 4 / 5;
+  object-fit: cover; */
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+}
+
+.aic-card-content {
+  padding: 0 0;
+  width: 100%;
+}
+
+.aic-card-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+  color: var(--text);
+}
+
+.aic-card-content p {
+  font-size: 0.95rem;
+  margin: 0.2rem 0;
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .aic-gallery-container {
+    padding-left: 1rem;
+  }
+}
