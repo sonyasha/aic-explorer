@@ -1,0 +1,35 @@
+name: Deploy to Render
+run-name: Deploy to Render triggered by @${{ github.actor }}
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    if: github.actor == github.repository_owner
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.18.0
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Type check
+      run: npx tsc --noEmit
+
+    - name: Build app
+      run: npm run build
+
+    - name: Trigger Render deploy
+      if: success()
+      env:
+        RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+      run: curl -X POST "$RENDER_DEPLOY_HOOK"
