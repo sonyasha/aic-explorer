@@ -1,22 +1,20 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 
-const CollapsibleSectionComponent = ({
-  title,
-  content,
-  isList = false,
-}: {
+import useCollapsible from '../../hooks/useCollapsible'
+
+type Props = {
   title: string
   content: string[] | string
   isList?: boolean
-}) => {
-  const [open, setOpen] = useState(false)
-
+}
+const CollapsibleSection: React.FC<Props> = ({ title, content, isList = false }) => {
+  const { isOpen, toggle } = useCollapsible()
   return (
     <div className="aic-collapsible">
-      <button onClick={() => setOpen((v) => !v)} className="aic-toggle">
-        {open ? '▼' : '▶'} {title}
+      <button onClick={toggle} className="aic-toggle">
+        {isOpen ? '▼' : '▶'} {title}
       </button>
-      {open &&
+      {isOpen &&
         (isList ? (
           <ul className="aic-collapsible-content">
             {(content as string[]).map((item, i) => (
@@ -30,6 +28,4 @@ const CollapsibleSectionComponent = ({
   )
 }
 
-const CollapsibleSection = memo(CollapsibleSectionComponent)
-
-export default CollapsibleSection
+export default memo(CollapsibleSection)
